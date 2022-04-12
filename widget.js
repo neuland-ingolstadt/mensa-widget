@@ -23,7 +23,7 @@ async function createWidget() {
     
     stack.addSpacer()
     
-    const priceText = stack.addText(meal.prices.student.toLocaleString('de', { style: 'currency', currency: 'EUR' }))
+    const priceText = stack.addText(meal.prices.student?.toLocaleString('de', { style: 'currency', currency: 'EUR' }))
     priceText.font = Font.systemFont(14)
     priceText.textColor = Color.gray()
     
