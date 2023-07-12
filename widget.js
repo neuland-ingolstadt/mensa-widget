@@ -18,7 +18,7 @@ async function createWidget() {
   for (const meal of meals) {
     const stack = widget.addStack()
     
-    const typeText = stack.addText(meal.name)
+    const typeText = stack.addText(meal.name.de)
     typeText.font = Font.systemFont(14)
     
     stack.addSpacer()
