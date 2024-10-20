@@ -1,7 +1,44 @@
+async function getFoodPlan(locations) {
+  const query = `
+    query {
+      food(locations: [${locations.map((x) => `"${x}"`).join(',')}]) {
+        foodData {
+          timestamp
+          meals {
+            name {
+              de
+            }
+            category
+            prices {
+              student
+            }
+            prices {
+              student
+            }
+            static
+            restaurant
+          }   
+        }
+      }
+    }
+  `;
+
+  const req = new Request('https://api.neuland.app/graphql');
+  req.method = 'POST';
+  req.headers = {
+    'Content-Type': 'application/json',
+  };
+  req.body = JSON.stringify({ query });
+
+  const response = await req.loadJSON();
+  return response;
+}
+
 async function createWidget() {
-  const req = new Request('https://neuland.app/api/mensa')
-  const [{ timestamp, meals }] = await req.loadJSON()
-  
+  const result = await getFoodPlan(['IngolstadtMensa'])
+  console.log(result)
+  const [{timestamp, meals}] = result.data.food.foodData
+  const mainMeals = meals.filter(meal => meal.category === 'main' && meal.static === false)
   const widget = new ListWidget()
   widget.url = `https://neuland.app/food`
   
@@ -15,7 +52,7 @@ async function createWidget() {
 
   widget.addSpacer(8)
   
-  for (const meal of meals) {
+  for (const meal of mainMeals) {
     const stack = widget.addStack()
     
     const typeText = stack.addText(meal.name.de)
